@@ -43,3 +43,31 @@ DROP TABLE left;
 DROP TABLE right;
 
 --- Joining 2 tables
+SELECT s.id AS sale, s.date, i.name, i.description, s.price --Selecting id price and date from sales and  name and description from items
+  FROM sale AS s -- we call our table sale as s
+  JOIN item AS i ON s.item_id = i.id --we called our table item as i and compare the item
+  ; --id from sales with the column id from itemss
+  
+-- Relating multiple tables
+
+SELECT i.name AS Item, c.name AS Cust, s.price AS Price --item from items, name from customers adn price from sale
+  FROM sale AS s -- we called sale as s
+  JOIN item AS i ON s.item_id = i.id --we calle item table as i and then we check if matches with the column of sales item_id
+  JOIN customer AS c ON s.customer_id = c.id -- we called the customer table as c and then check if matches with something in the sales table
+  ORDER BY Cust, Item --finally we order by customer name and then by item
+;
+
+INSERT INTO customer ( name ) VALUES ( 'Jane Smith' );
+SELECT * FROM customer;
+
+-- left joins
+SELECT c.name AS Cust, c.zip, i.name AS Item, i.description, s.quantity AS Quan, s.price AS Price
+  FROM customer AS c
+  LEFT JOIN sale AS s ON s.customer_id = c.id
+  LEFT JOIN item AS i ON s.item_id = i.id
+  ORDER BY Cust, Item
+;
+
+-- restore database
+DELETE FROM customer WHERE id = 4;
+

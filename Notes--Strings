@@ -1,0 +1,41 @@
+-- Length of a String
+
+SELECT LENGTH('string');
+
+--
+SELECT Name, LENGTH(Name) AS Len  --showing the columns Name, Len
+FROM City --from the table city 
+ORDER BY Len DESC, Name; --order by Len and then by name
+
+--- The Substring Function
+
+SELECT SUBSTR ('this string',6); ---- string, # Where it begins, # where it ends
+
+SELECT title, released, -- SELECTING THE REALEASED TITLE
+    SUBSTR(released, 1, 4) AS year, --Getting the year realesed
+    SUBSTR(released, 6, 2) AS month, -- Getting the month 
+    SUBSTR(released, 9, 2) AS day -- getting the day of the realese 
+  FROM album
+  ORDER BY released
+;
+
+
+--TRIM FUNCTION
+
+SELECT '   string   ';
+SELECT TRIM('   string   ');
+SELECT TRIM('   string   string   ');
+SELECT LTRIM('   string   ');
+SELECT RTRIM('   string   ');
+SELECT '...string...';
+SELECT TRIM('...string...', '.'); --We could indicate what caracter we want to remove
+
+--Upper/Lower
+SELECT 'StRiNg';
+SELECT 'StRiNg' = 'string'; --we ould compare strings
+SELECT LOWER('StRiNg') = LOWER('string'); --TO LOWER CASES
+SELECT UPPER('StRiNg') = UPPER('string'); --TO UPPER CASES
+SELECT UPPER(Name) FROM City ORDER BY Name; --printing the column name in Upper cases from City
+SELECT LOWER(Name) FROM City ORDER BY Name;
+
+
