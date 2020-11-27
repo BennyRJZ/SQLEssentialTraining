@@ -1,0 +1,185 @@
+/* Create table */
+CREATE TABLE test (
+  a INTEGER,
+  b TEXT
+);
+
+INSERT INTO test VALUES ( 1, "a");
+INSERT INTO test VALUES ( 2, "b");
+INSERT INTO test VALUES ( 2, "c");
+
+SELECT * FROM test;
+
+/* Delete Database */
+
+DROP TABLE IF EXISTS test;
+
+/* INSERTING ROWS */
+
+/* Create table */
+CREATE TABLE test (
+  a INTEGER,
+  b TEXT,
+  c TEXT
+);
+
+INSERT INTO test VALUES ( 1, "a", "a1");
+INSERT INTO test (b,c) VALUES ("cb", "bc");
+/*Filling with NULL values */
+INSERT INTO test DEFAULT VALUES;
+/* Inserting from another table */
+INSERT INTO test (a,b,c) SELECT id, name, description from ITEM;
+
+SELECT * FROM test;
+
+--Delete From
+--test.db
+
+SELECT * FROM test;
+--Deleting finding a match
+DELETE FROM test WHERE a = 3;
+SELECT * FROM test WHERE a = 1;
+DELETE FROM test WHERE a = 1;
+
+--NULL == LACK OF VALUE
+--test.db
+SELECT * FROM test;
+--Matching where a == NULL
+SELECT * FROM test WHERE a = NULL;
+--Matching rows where there is a NULL value in the a column
+SELECT * FROM test WHERE a IS NULL;
+--Finding rows where there is not a NULL VALUE
+SELECT * FROM test WHERE a IS NOT NULL;
+--Inserting values with null
+INSERT INTO test ( a, b, c ) VALUES ( 0, NULL, '' );
+--Finding  rows when the B column is NULL
+SELECT * FROM test WHERE b IS NULL;
+--Finding rows when the B and C columns is empty
+SELECT * FROM test WHERE b = '';
+SELECT * FROM test WHERE c = '';
+--Finding Where c is null
+SELECT * FROM test WHERE c IS NULL;
+
+
+DROP TABLE test;
+CREATE TABLE test (
+    --We use NOT NULL when we stablish a value to avoid NULL Values in determinated columns
+  a INTEGER NOT NULL,
+  b TEXT NOT NULL,
+  c TEXT
+);
+
+INSERT INTO test VALUES ( 1, 'this', 'that' );
+SELECT * FROM test;
+
+--We are just trying that the declaration NOT NULL is working
+INSERT INTO test ( b, c ) VALUES ( 'one', 'two' );
+INSERT INTO test ( a, c ) VALUES ( 1, 'two' );
+INSERT INTO test ( a, b ) VALUES ( 1, 'two' );
+
+DROP TABLE test;
+
+
+--- 6 CONSTRAINTS.
+CREATE TABLE test ( a TEXT, b TEXT, c TEXT );
+INSERT INTO test ( a, b ) VALUES ( 'one', 'two' );
+SELECT * FROM test;
+DROP TABLE test;
+
+--TEXT NOT NULL -- Help us to avoid null data in a column
+CREATE TABLE test ( a TEXT, b TEXT, c TEXT NOT NULL );
+-- TEXT DEFAULT assingns to the column a default value
+CREATE TABLE test ( a TEXT, b TEXT, c TEXT DEFAULT 'panda' );
+INSERT INTO test ( a, b ) VALUES ( 'one', 'two' );
+SELECT * FROM test;
+DROP TABLE test;
+
+--- UNIQUE We will use this if we want to above repeated values in a column
+CREATE TABLE test ( a TEXT UNIQUE, b TEXT, c TEXT DEFAULT 'panda' );
+
+
+--Modifying the Schema of a table == ALTER TABLE
+ALTER TABLE test ADD d TEXT;
+SELECT * FROM test;
+ALTER TABLE test ADD e TEXT DEFAULT 'benny';
+SELECT * FROM test;
+
+-- ID The methods to create a Primary Key changes depending on the SQL Manager
+CREATE TABLE test (
+  id INTEGER PRIMARY KEY, --Defining ID AS PRIMARY KEY
+  a INTEGER,
+  b TEXT
+);
+INSERT INTO test (a, b) VALUES ( 10, 'a' );
+INSERT INTO test (a, b) VALUES ( 11, 'b' );
+INSERT INTO test (a, b) VALUES ( 12, 'c' );
+SELECT * FROM test; -- We can see how  the id was auto incrementable
+
+-- FILTERING DATA USING WHERE LIKE IN
+--world db
+SELECT * FROM Country; -- GENERAL SELECT
+--- USING WHEREW
+SELECT Name, Continent, Population --Selecting the columns
+FROM Country -- Selecting the tables
+WHERE Population < 100000 ORDER BY Population DESC; -- Using comparators and ordering in
+--a desceding way by population
+
+-- Same search but now including the null values.
+SELECT Name, Continent, Population 
+FROM Country 
+WHERE Population < 100000 OR Population IS NULL ORDER BY Population DESC;
+
+-- Using the operator AND to add a continent to the search.
+SELECT Name, Continent, Population 
+FROM Country 
+WHERE Population < 100000 AND Continent = 'Oceania' ORDER BY Population DESC; 
+--- FINDING <100000 of Countrys from Oceania
+
+--- Finding countries that include the word island in his name
+-- island% at the beggining of the string
+-- %island at the end of the string
+-- %island% present in the string without take care of the location of the word
+SELECT Name, Continent, Population 
+FROM Country 
+WHERE Name LIKE '%island%' ORDER BY Name;
+
+--IN OPERATOR , We could use it as an OR
+SELECT Name, Continent, Population 
+FROM Country 
+WHERE Continent IN ( 'Europe', 'Asia' ) ORDER BY Name; --Countries in ASIA || EUROPE
+
+
+--SELECT DISTINCT Used to get an unique result
+SELECT DISTINCT Continent FROM Country;
+
+--TEST DB
+DROP TABLE test;
+
+CREATE TABLE test ( a int, b int );
+INSERT INTO test VALUES ( 1, 1 );
+INSERT INTO test VALUES ( 2, 1 );
+INSERT INTO test VALUES ( 3, 1 );
+INSERT INTO test VALUES ( 4, 1 );
+INSERT INTO test VALUES ( 5, 1 );
+INSERT INTO test VALUES ( 1, 2 );
+INSERT INTO test VALUES ( 1, 2 );
+INSERT INTO test VALUES ( 1, 2 );
+INSERT INTO test VALUES ( 1, 2 );
+INSERT INTO test VALUES ( 1, 2 );
+SELECT * FROM test;
+
+SELECT DISTINCT  a FROM test; --getting uniques values for a
+SELECT DISTINCT  b FROM test; --getting uniques values for b
+SELECT DISTINCT  a,b FROM test; --getting uniques values for a
+
+---ORDERING
+SELECT Name FROM Country; --ORDER BY ID BY DEFAULT
+SELECT Name FROM Country ORDER BY Name;
+SELECT Name FROM Country ORDER BY Name DESC; -- DESC DESCENDING
+SELECT Name FROM Country ORDER BY Name ASC; --ASCENDING
+SELECT Name, Continent FROM Country ORDER BY Continent, Name; --Order the column A by continent
+--order the column b by name
+SELECT Name, Continent, Region FROM Country ORDER BY Continent DESC, Region, Name;
+
+
+--- CONDITIONALS EXPRESIONS

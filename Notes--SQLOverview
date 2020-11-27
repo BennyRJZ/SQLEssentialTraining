@@ -1,0 +1,34 @@
+/*#We use AS to name a column */
+SELECT Name,LifeExpectancy AS 'Life Expectancy'  FROM Country ORDER BY Name;
+
+/* WHERE takes a logical expresion representing comparasion
+ORDER BY -- ORDER THE COLUMN BY THE GIVEN PARAMETERS
+Needs to be last:
+LIMIT --- LIMIT THE NUMBER OF ROWS DEPLOYED
+OFFSET --- Ignore the first # of ROWS 
+ */
+SELECT Name, Continent, Region FROM Country Where Continent = 'Europe' ORDER BY Name LIMIT 5 OFFSET 5;
+
+/*Selecting Columns */
+SELECT Name AS Country, Continent, Region FROM Country;
+
+/* Counting Rows  */
+SELECT COUNT (*) FROM Country WHERE Population > 100000000 AND Continent = 'Europe';
+/* Counting Rows Where are data */
+SELECT COUNT (LifeExpectancy) FROM Country;
+
+/*Inserting rows in a table */
+SELECT * FROM customer;
+
+INSERT INTO customer (name, address, city, state, zip)
+VALUES('Fred Flinstone','123 Cobblestone Way', 'Bedrock','CA','91234');
+
+INSERT INTO customer (name, city, state)
+VALUES('Jimmy Hendrix','Renton','WA');
+
+/*Updating DAta in a Table */
+UPDATE customer SET address = NULL, zip = NULL WHERE id = 5;
+
+/*Deleting Rows */
+DELETE FROM customer WHERE id = 5;
+SELECT name FROM customer;
