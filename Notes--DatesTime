@@ -1,0 +1,13 @@
+-- 02 DATE/TIME functions
+-- :memory:
+-- USE UTC
+--FUNCIONS ARE NOT STANDARIZED
+SELECT DATETIME('now'); --SHOW THE DATE AND THE TIME OF NOW
+SELECT DATE('now'); -- SHOW THE DAY OF NOW
+SELECT TIME('now'); ---SHOW THE HOUR
+SELECT DATETIME('now', '+1 day'); -- SUMS 1 DAY 
+SELECT DATETIME('now', '+3 days'); -- SUMS 1 DAY TO THE DAte
+SELECT DATETIME('now', '-1 month');   --- REST ONE MONTH
+SELECT DATETIME('now', '+1 year'); --ADD ONE YEAR
+SELECT DATETIME('now', '+3 hours', '+27 minutes', '-1 day', '+3 years'); -- YOU CAN ADD DIFFERENTS DATES AN TIMES
+

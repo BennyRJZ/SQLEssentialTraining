@@ -1,0 +1,72 @@
+--Aggregate Functions
+SELECT COUNT(*) FROM Country; --Counts the # of the rows
+
+SELECT Region, COUNT(*) -- SELECTING THE REGION AND COUNTING
+  FROM Country    
+  GROUP BY Region --Groupyng by Region
+;
+
+SELECT Region, COUNT(*) AS Count
+  FROM Country
+  GROUP BY Region -- Grouping by region
+  ORDER BY Count DESC, Region -- ordering in a descending way by count
+;
+
+-- album.db
+-- How many tracks an album has
+SELECT a.title AS Album, COUNT(t.track_number) as Tracks
+--getting the title, counting from tracks the number of it
+  FROM track AS t --getting tracks and putting as t
+  JOIN album AS a --getting album as a in a JOIN
+    ON a.id = t.album_id --matching ids
+  GROUP BY a.id -- grouping by album id
+  ORDER BY Tracks DESC, Album -- ordering by the number of the tracks and then by albums
+;
+--- Same query but this time only taking the albums with more than 10 tracks
+SELECT a.title AS Album, COUNT(t.track_number) as Tracks
+  FROM track AS t
+  JOIN album AS a
+    ON a.id = t.album_id
+  GROUP BY a.id
+  HAVING Tracks >= 10 -- only includes that tracks that have more than 10 tracks
+  ORDER BY Tracks DESC, Album
+;
+---Counting the albums of the beatles with more than 10 tracks
+SELECT a.title AS Album, COUNT(t.track_number) as Tracks
+  FROM track AS t
+  JOIN album AS a
+    ON a.id = t.album_id
+  WHERE a.artist = "The Beatles"
+  GROUP BY a.id
+  HAVING Tracks >= 10
+  ORDER BY Tracks DESC, Album
+;
+
+--Using aggregate functions
+SELECT COUNT(*) FROM Country; -- count the number of rows
+SELECT COUNT(Population) FROM Country; --counting the rows with no null information
+SELECT AVG(Population) FROM Country; -- average
+
+--Average population by region
+SELECT Region, AVG(Population) 
+FROM Country 
+GROUP BY Region; 
+
+
+--- Min and MAx population of the countrys by region
+SELECT Region, MIN(Population), MAX(Population) 
+FROM Country 
+GROUP BY Region;
+
+--- Sum of the regions
+SELECT Region, SUM(Population) 
+FROM Country 
+GROUP BY Region;
+
+-- 03 DISTINCT Aggregates ---- = unique does the same thing
+-- world.db
+
+SELECT COUNT(HeadOfState) FROM Country;
+SELECT HeadOfState FROM Country ORDER BY HeadOfState;
+SELECT COUNT(DISTINCT HeadOfState) FROM Country; --- DISTINCT Counts only the rows that contains data
+

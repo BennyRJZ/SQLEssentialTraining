@@ -1,0 +1,181 @@
+CREATE TABLE t (
+    a TEXT,
+    b TEXT
+);
+
+INSERT INTO t VALUES (
+                  'NY0123',
+                  'US4567'
+              );
+
+INSERT INTO t VALUES (
+                  'AZ9437',
+                  'GB1234'
+              );
+
+INSERT INTO t VALUES (
+                  'CA1279',
+                  'FR5678'
+              );
+
+SELECT *
+  FROM t;-- Getting the number of State, the SCode, the 2 chars of country and de CCode
+
+SELECT SUBSTR(a, 1, 2) AS State,
+       SUBSTR(a, 3) AS SCode,
+       SUBSTR(b, 1, 2) AS Country,
+       SUBSTR(b, 3) AS CCode
+  FROM t;
+
+SELECT co.Name,
+       ss.CCode
+  FROM (-- getting the name of the country and the Country code from the subselect
+           SELECT SUBSTR(a, 1, 2) AS State,
+                  SUBSTR(a, 3) AS SCode,
+                  SUBSTR(b, 1, 2) AS Country,
+                  SUBSTR(b, 3) AS CCode
+             FROM t
+       )
+       AS ss-- using the last query to create a subconsult
+       JOIN
+       Country AS co ON co.Code2 = ss.Country/* matching the code2 with the ss.Country */;
+
+DROP TABLE t;-- 02 searching within a result set
+-- album.db-- Finding the ID of the album that his duration is less than 90mins
+SELECT DISTINCT album_id
+  FROM track
+ WHERE duration <= 90;
+
+SELECT *
+  FROM album
+ WHERE id IN (
+           SELECT DISTINCT album_id
+             FROM track
+            WHERE duration <= 90 -- Using the subselect to get the album name
+       );
+
+SELECT a.title AS album, --selecting from almbun title and artist
+       a.artist,
+       t.track_number AS seq, -- selecting from t the track number, title and duration as SECS
+       t.title,
+       t.duration AS secs
+  FROM album AS a --using album as A
+       JOIN --using join
+       track AS t ON t.album_id = a.id --matchng the album id with the track album id
+ WHERE a.id IN (
+           SELECT DISTINCT album_id --selecting distincts albums
+             FROM track --table track
+            WHERE duration <= 90 --USING THE PAST QUERY IN ANOTHER QUERY TO GET THE DISIRED DURATION
+       )
+ ORDER BY a.title,
+          t.track_number; ---Ordering by the album's title and the track number
+-- SELECTING THE TRACKS WITH LESS THAN 90s OF DURATION
+SELECT a.title AS album,
+       a.artist,
+       t.track_number AS seq,
+       t.title,
+       t.duration AS secs
+  FROM album AS a
+       JOIN
+       (
+           SELECT album_id,
+                  track_number,
+                  duration,
+                  title
+             FROM track
+            WHERE duration <= 90
+       )
+       AS t ON t.album_id = a.id
+ ORDER BY a.title,
+          t.track_number;
+          
+
+-- 03 Creating a view
+--Saving querys likes views to use over and over
+
+-- album.db
+SELECT id,
+       album_id,
+       title,
+       track_number,
+       duration / 60 AS m,
+       duration % 60 AS s
+  FROM track;
+
+CREATE VIEW trackView AS -- saving the query as view
+    SELECT id,
+           album_id,
+           title,
+           track_number,
+           duration / 60 AS m,
+           duration % 60 AS s
+      FROM track;
+
+SELECT *
+  FROM trackView; -- showing the view---
+
+SELECT a.title AS album,
+       a.artist,
+       t.track_number AS seq,
+       t.title,
+       t.m,
+       t.s
+  FROM album AS a --using the view in a subquery
+       JOIN
+       trackView AS t ON t.album_id = a.id
+ ORDER BY a.title,
+          t.track_number;
+
+SELECT a.title AS album,
+       a.artist,
+       t.track_number AS seq,
+       t.title,
+       t.m || ':' || substr('00' || t.s, -2, 2) AS dur
+  FROM album AS a
+       JOIN
+       trackView AS t ON t.album_id = a.id
+ ORDER BY a.title,
+          t.track_number;
+
+DROP VIEW IF EXISTS trackView;
+
+
+
+-- 04 Joined view
+-- album.db
+SELECT a.artist AS artist,
+       a.title AS album,
+       t.title AS track,
+       t.track_number AS trackno,
+       t.duration / 60 AS m,
+       t.duration % 60 AS s
+  FROM track AS t
+       JOIN
+       album AS a ON a.id = t.album_id;
+
+CREATE VIEW joinedAlbum AS  --creating view of a JOIN
+    SELECT a.artist AS artist,
+           a.title AS album,
+           t.title AS track,
+           t.track_number AS trackno,
+           t.duration / 60 AS m,
+           t.duration % 60 AS s
+      FROM track AS t
+           JOIN
+           album AS a ON a.id = t.album_id;
+
+SELECT *
+  FROM joinedAlbum;
+
+SELECT *
+  FROM joinedAlbum
+ WHERE artist = 'Jimi Hendrix';
+
+SELECT artist,
+       album,
+       track,
+       trackno,
+       m || ':' || substr('00' || s, -2, 2) AS duration
+  FROM joinedAlbum;
+
+DROP VIEW IF EXISTS joinedAlbum;
